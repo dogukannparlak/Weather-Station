@@ -1,0 +1,6 @@
+# Requires Raspberry Pi OS / Linux with GPIO & I2C — not for full hardware use on Windows/macOS
+Flask>=2.3,<4
+adafruit-circuitpython-dht
+adafruit-circuitpython-bmp280
+adafruit-circuitpython-ads1x15
+RPi.GPIO

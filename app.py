@@ -81,7 +81,7 @@ def weather_data():
         # BMP280 sensorunden basinc ve yukseklik verileri okunur
         pressure = round(bmp280.pressure, 3)
         altitude = round(bmp280.altitude, 3)
-        pressure_atm = round(pressure / 1025, 3) 
+        pressure_atm = round(pressure / 1025, 3)
     except:
         # Sensor verisi okunamazsa None dondurulur
         temp_bmp, pressure, altitude = None, None, None
@@ -112,10 +112,9 @@ def weather_data():
         "wind_direction": wind_direction,
         "rain_status": rain_status,
         "update_time" : (datetime.utcnow() + timedelta(hours=3)).strftime("%Y-%m-%d %H:%M:%S")
-        
+
     }
 
 # Flask uygulamasi calistirilir
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  # Uygulama tum IP adreslerinden erisilebilir ve 5000 portunda calisir
-S

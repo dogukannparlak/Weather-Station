@@ -2,18 +2,19 @@
 
 ## Genel Bakış
 
-Bu proje, Raspberry Pi üzerinde çalışan Flask tabanlı bir hava durumu istasyonu uygulamasıdır. Uygulama, sıcaklık, nem, atmosfer basıncı, rüzgar hızı ve yağmur tespiti gibi çevresel verileri ölçmek ve göstermek için çeşitli sensörleri entegre eder.
+Bu proje, Raspberry Pi üzerinde çalışan Flask tabanlı bir hava durumu istasyonu uygulamasıdır. Uygulama, sıcaklık, nem, atmosfer basıncı, rüzgar hızı, rüzgar yönü ve yağmur tespiti gibi çevresel verileri ölçmek ve göstermek için çeşitli sensörleri entegre eder.
 
 ## Proje Yapısı
 
 ```
-/proje_dizini
+/Weather-Station
 |-- app.py                # Ana Flask uygulaması
 |-- templates
 |   |-- index.html        # Ana sayfa şablonu (özelleştirilebilir)
-|-- static                # CSS, JS veya resimler (gerekirse)
 |-- requirements.txt      # Gerekli Python paketleri listesi
-|-- my_env/               # Python sanal ortamı
+|-- LICENSE               # MIT lisansı
+|-- CONTRIBUTING.md       # Katkı rehberi
+|-- venv/                 # Python sanal ortamı (kurulum sonrası)
 ```
 
 ---
@@ -27,6 +28,7 @@ Bu proje, Raspberry Pi üzerinde çalışan Flask tabanlı bir hava durumu istas
 - BMP280 Sensörü (Basınç ve İrtifa)
 - ADS1115 ADC Modülü
 - Anemometre (Rüzgar Hızı Sensörü)
+- Potansiyometre / Rüzgar Yönü Sensörü (ADS1115 A1)
 - Yağmur Sensörü
 
 ### 2. Yazılım Gereksinimleri
@@ -57,12 +59,12 @@ Sanal ortam (virtual environment), Python projeleri için bağımsız bir çalı
 ```bash
 sudo apt update
 sudo apt install python3-venv python3-pip
-python3 -m venv my_env
-source my_env/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Yukarıdaki komutlar, `my_env` adında bir sanal ortam oluşturur ve etkinleştirir. Bu ortam etkin olduğunda terminal satırında `(my_env)` ibaresi görünecektir. Ortamı devre dışı bırakmak için:
+Yukarıdaki komutlar, `venv` adında bir sanal ortam oluşturur ve etkinleştirir. Bu ortam etkin olduğunda terminal satırında `(venv)` ibaresi görünecektir. Ortamı devre dışı bırakmak için:
 
 ```bash
 deactivate
@@ -72,7 +74,14 @@ deactivate
 
 ### 4. Gerekli Kütüphanelerin Kurulumu
 
-Aşağıdaki komutlarla gerekli kütüphaneleri tek tek kurabilirsiniz:
+Bağımlılıkları `requirements.txt` üzerinden kurabilirsiniz:
+
+```bash
+pip install -r requirements.txt
+```
+
+Veya tek tek:
+
 ```bash
 pip install Flask
 pip install adafruit-circuitpython-dht
@@ -103,17 +112,19 @@ pip install RPi.GPIO
 
 - **BMP280 (Basınç Sensörü)**:
   - Kod, sensörü iki olası I2C adresinde (0x76 veya 0x77) başlatmayı dener.
-  - Deniz seviyesindeki basınç 1013.25 hPa olarak ayarlanır.
+  - Deniz seviyesindeki basınç 1025 hPa olarak ayarlanır.
 - **DHT22 (Sıcaklık ve Nem Sensörü)**: GPIO 27 pinine bağlanmıştır.
 - **Yağmur Sensörü**: GPIO 17 pininde giriş olarak yapılandırılmıştır.
-- **ADS1115 ve Anemometre**: Anemometreden gelen analog giriş ADS1115 üzerinden (P0 pini) okunur.
+- **ADS1115, Anemometre ve Rüzgar Yönü**:
+  - Anemometre analog girişi ADS1115 üzerinden A0 (P0) pininden okunur.
+  - Rüzgar yönü potansiyometresi ADS1115 üzerinden A1 (P1) pininden okunur.
 
 ---
 
 ## Uygulamayı Çalıştırma
 
 ```bash
-source my_env/bin/activate
+source venv/bin/activate
 python app.py
 ```
 
